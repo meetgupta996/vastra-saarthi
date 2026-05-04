@@ -7,15 +7,17 @@ export default function WorkerLogin() {
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
-  const { pin } = useLaundry(); // 🔥 MUST use context
+  const { pin } = useLaundry();
 
   const handleLogin = () => {
-    if (pinInput === pin) {
-      sessionStorage.setItem("auth", "true"); // 🔥 REQUIRED
+    if (pinInput.toString() === pin.toString()) {
+      sessionStorage.setItem("auth", "true");
       navigate("/worker");
     } else {
       setError("Wrong PIN");
     }
+    console.log("Entered:", pinInput);
+    console.log("Actual PIN:", pin);
   };
 
   return (
