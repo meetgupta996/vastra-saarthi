@@ -10,14 +10,17 @@ export default function WorkerPortal() {
     return <Navigate to="/worker-login" />;
   }
 
-  const { entries, addEntry } = useLaundry();
+  const { entries, addEntry, markReady, markCollected } = useLaundry();
 
   const [studentId, setStudentId] = useState("");
   const [clothCount, setClothCount] = useState("");
   const [notes, setNotes] = useState("");
   const [error, setError] = useState("");
 
-  // added entry handler
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("all");
+
+  // add entry handler
   const handleAdd = () => {
     const result = addEntry(studentId, Number(clothCount), notes);
 
@@ -26,21 +29,28 @@ export default function WorkerPortal() {
       return;
     }
 
-    // reset form
     setStudentId("");
     setClothCount("");
     setNotes("");
     setError("");
   };
 
+  // filter logic
+  const filteredEntries = entries
+    .filter((e) => e.studentId.toLowerCase().includes(search.toLowerCase()))
+    .filter((e) => {
+      if (filter === "all") return true;
+      return e.status === filter;
+    });
+
   return (
     <div style={{ padding: "20px" }}>
       <h1>Worker Dashboard</h1>
 
-      {/* STATS (placeholder for now) */}
+      {/* STATS */}
       <h3>Stats Section</h3>
 
-      {/* ADDED LAUNDRY FORM */}
+      {/* ADD LAUNDRY FORM */}
       <section>
         <h3>Add Laundry</h3>
 
@@ -79,14 +89,31 @@ export default function WorkerPortal() {
         {error && <p style={{ color: "red" }}>{error}</p>}
       </section>
 
+      {/* SEARCH + FILTER */}
+      <section style={{ marginTop: "20px" }}>
+        <input
+          type="text"
+          placeholder="Search by Student ID"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
+        <div style={{ marginTop: "10px" }}>
+          <button onClick={() => setFilter("all")}>All</button>
+          <button onClick={() => setFilter("submitted")}>Submitted</button>
+          <button onClick={() => setFilter("ready")}>Ready</button>
+          <button onClick={() => setFilter("collected")}>Collected</button>
+        </div>
+      </section>
+
       {/* ENTRIES LIST */}
       <section>
         <h3>Entries List</h3>
 
-        {entries.length === 0 ? (
-          <p>No entries yet</p>
+        {filteredEntries.length === 0 ? (
+          <p>No entries found</p>
         ) : (
-          entries.map((e) => (
+          filteredEntries.map((e) => (
             <div
               key={e.id}
               style={{
@@ -107,6 +134,19 @@ export default function WorkerPortal() {
               <p>
                 <strong>Notes:</strong> {e.notes}
               </p>
+
+              {/* STATUS BUTTONS */}
+              {e.status === "submitted" && (
+                <button onClick={() => markReady(e.id)}>Mark Ready</button>
+              )}
+
+              {e.status === "ready" && (
+                <button onClick={() => markCollected(e.id)}>
+                  Mark Collected
+                </button>
+              )}
+
+              {e.status === "collected" && <p>✅ Completed</p>}
             </div>
           ))
         )}
