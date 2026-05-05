@@ -20,8 +20,17 @@ export const LaundryProvider = ({ children }) => {
     setLocalStorage("laundry_worker_pin", pin);
   }, [pin]);
 
-  // adds entry
+  // add entry
   const addEntry = (studentId, clothCount, notes = "") => {
+    // normalize input
+    studentId = studentId.trim().toUpperCase();
+
+    // validation
+    if (!studentId || !clothCount || clothCount <= 0) {
+      return { success: false, message: "Invalid input" };
+    }
+
+    // duplicate check
     const exists = entries.some(
       (e) =>
         e.studentId === studentId &&
@@ -43,37 +52,51 @@ export const LaundryProvider = ({ children }) => {
       collectedAt: null,
     };
 
-    setEntries([...entries, newEntry]);
+    // state update
+    setEntries((prev) => [...prev, newEntry]);
 
     return { success: true };
   };
 
-  //  marks ready
+  // mark ready
   const markReady = (id) => {
-    const updated = entries.map((e) =>
-      e.id === id
-        ? { ...e, status: "ready", readyAt: new Date().toISOString() }
-        : e
-    );
+    const updated = entries.map((e) => {
+      if (e.id === id && e.status === "submitted") {
+        return {
+          ...e,
+          status: "ready",
+          readyAt: new Date().toISOString(),
+        };
+      }
+      return e;
+    });
 
     setEntries(updated);
   };
 
-  // marks collected
+  // mark collected
   const markCollected = (id) => {
-    const updated = entries.map((e) =>
-      e.id === id
-        ? { ...e, status: "collected", collectedAt: new Date().toISOString() }
-        : e
-    );
+    const updated = entries.map((e) => {
+      if (e.id === id && e.status === "ready") {
+        return {
+          ...e,
+          status: "collected",
+          collectedAt: new Date().toISOString(),
+        };
+      }
+      return e;
+    });
 
     setEntries(updated);
   };
+
+  // sorting
+  const sortedEntries = [...entries].sort((a, b) => b.id - a.id);
 
   return (
     <LaundryContext.Provider
       value={{
-        entries,
+        entries: sortedEntries,
         setEntries,
         pin,
         setPin,
