@@ -8,7 +8,10 @@ export default function StudentPortal() {
   const [result, setResult] = useState([]);
 
   const handleSearch = () => {
-    const filtered = entries.filter((e) => e.studentId === studentId);
+    const formattedId = studentId.trim().toUpperCase();
+
+    const filtered = entries.filter((e) => e.studentId === formattedId);
+
     setResult(filtered);
   };
 
@@ -38,8 +41,9 @@ export default function StudentPortal() {
               key={e.id}
               style={{
                 border: "1px solid #ccc",
-                padding: "10px",
-                marginBottom: "10px",
+                padding: "15px",
+                marginBottom: "15px",
+                borderRadius: "10px",
               }}
             >
               <p>
@@ -49,10 +53,64 @@ export default function StudentPortal() {
                 <strong>Clothes:</strong> {e.clothCount}
               </p>
               <p>
-                <strong>Status:</strong> {e.status}
-              </p>
-              <p>
                 <strong>Notes:</strong> {e.notes}
+              </p>
+
+              {/* STATUS TIMELINE */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: "30px",
+                  marginTop: "15px",
+                  alignItems: "center",
+                }}
+              >
+                {/* Submitted */}
+                <div style={{ textAlign: "center" }}>
+                  <div
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      borderRadius: "50%",
+                      background: "green",
+                    }}
+                  />
+                  <p>Submitted</p>
+                </div>
+
+                {/* Ready */}
+                <div style={{ textAlign: "center" }}>
+                  <div
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      borderRadius: "50%",
+                      background:
+                        e.status === "ready" || e.status === "collected"
+                          ? "green"
+                          : "gray",
+                    }}
+                  />
+                  <p>Ready</p>
+                </div>
+
+                {/* Collected */}
+                <div style={{ textAlign: "center" }}>
+                  <div
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      borderRadius: "50%",
+                      background: e.status === "collected" ? "green" : "gray",
+                    }}
+                  />
+                  <p>Collected</p>
+                </div>
+              </div>
+
+              {/* STATUS TEXT */}
+              <p style={{ marginTop: "10px" }}>
+                <strong>Current Status:</strong> {e.status}
               </p>
             </div>
           ))
