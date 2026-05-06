@@ -20,7 +20,7 @@ export const LaundryProvider = ({ children }) => {
     setLocalStorage("laundry_worker_pin", pin);
   }, [pin]);
 
-  // add entry
+  // add new laundry entry
   const addEntry = (studentId, clothCount, notes = "") => {
     // normalize input
     studentId = studentId.trim().toUpperCase();
@@ -30,7 +30,7 @@ export const LaundryProvider = ({ children }) => {
       return { success: false, message: "Invalid input" };
     }
 
-    // duplicate check
+    // duplicate active laundry check
     const exists = entries.some(
       (e) =>
         e.studentId === studentId &&
@@ -38,7 +38,10 @@ export const LaundryProvider = ({ children }) => {
     );
 
     if (exists) {
-      return { success: false, message: "Active laundry already exists" };
+      return {
+        success: false,
+        message: "Active laundry already exists",
+      };
     }
 
     const newEntry = {
@@ -52,13 +55,13 @@ export const LaundryProvider = ({ children }) => {
       collectedAt: null,
     };
 
-    // state update
+    // safe state update
     setEntries((prev) => [...prev, newEntry]);
 
     return { success: true };
   };
 
-  // mark ready
+  // update status to ready
   const markReady = (id) => {
     const updated = entries.map((e) => {
       if (e.id === id && e.status === "submitted") {
@@ -68,13 +71,14 @@ export const LaundryProvider = ({ children }) => {
           readyAt: new Date().toISOString(),
         };
       }
+
       return e;
     });
 
     setEntries(updated);
   };
 
-  // mark collected
+  // update status to collected
   const markCollected = (id) => {
     const updated = entries.map((e) => {
       if (e.id === id && e.status === "ready") {
@@ -84,13 +88,60 @@ export const LaundryProvider = ({ children }) => {
           collectedAt: new Date().toISOString(),
         };
       }
+
       return e;
     });
 
     setEntries(updated);
   };
 
-  // sorting
+  // dashboard statistics
+  const stats = {
+    totalActive: entries.filter(
+      (e) => e.status === "submitted" || e.status === "ready"
+    ).length,
+
+    readyCount: entries.filter(
+      (e) => e.status === "ready"
+    ).length,
+
+    collectedCount: entries.filter(
+      (e) => e.status === "collected"
+    ).length,
+
+    totalEntries: entries.length,
+  };
+
+  // change worker PIN
+  const changePin = (oldPin, newPin) => {
+    if (oldPin !== pin) {
+      return {
+        success: false,
+        message: "Incorrect old PIN",
+      };
+    }
+
+    if (newPin.length < 4) {
+      return {
+        success: false,
+        message: "PIN must be at least 4 digits",
+      };
+    }
+
+    setPin(newPin);
+
+    return {
+      success: true,
+      message: "PIN updated successfully",
+    };
+  };
+
+  // clear all entries
+  const clearEntries = () => {
+    setEntries([]);
+  };
+
+  // newest first
   const sortedEntries = [...entries].sort((a, b) => b.id - a.id);
 
   return (
@@ -103,6 +154,9 @@ export const LaundryProvider = ({ children }) => {
         addEntry,
         markReady,
         markCollected,
+        stats,
+        changePin,
+        clearEntries,
       }}
     >
       {children}
