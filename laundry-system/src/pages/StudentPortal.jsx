@@ -6,115 +6,178 @@ export default function StudentPortal() {
 
   const [studentId, setStudentId] = useState("");
   const [result, setResult] = useState([]);
+  const [message, setMessage] = useState("");
 
   const handleSearch = () => {
     const formattedId = studentId.trim().toUpperCase();
 
+    // empty input check
+    if (!formattedId) {
+      setMessage("Please enter Student ID");
+      setResult([]);
+      return;
+    }
+
     const filtered = entries.filter((e) => e.studentId === formattedId);
+
+    // no result message
+    if (filtered.length === 0) {
+      setMessage("No laundry found");
+    } else {
+      setMessage("");
+    }
 
     setResult(filtered);
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Student Portal</h1>
+    <div
+      style={{
+        padding: "20px",
+        maxWidth: "900px",
+        margin: "0 auto",
+      }}
+    >
+      <h1 style={{ marginBottom: "20px" }}>Student Portal</h1>
 
       {/* SEARCH SECTION */}
-      <input
-        type="text"
-        placeholder="Enter Student ID"
-        value={studentId}
-        onChange={(e) => setStudentId(e.target.value)}
-      />
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          flexWrap: "wrap",
+        }}
+      >
+        <input
+          type="text"
+          placeholder="Enter Student ID"
+          value={studentId}
+          onChange={(e) => setStudentId(e.target.value)}
+          style={{
+            padding: "10px",
+            flex: "1",
+            minWidth: "250px",
+          }}
+        />
 
-      <button onClick={handleSearch} style={{ marginLeft: "10px" }}>
-        Search
-      </button>
+        <button
+          onClick={handleSearch}
+          style={{
+            padding: "10px 20px",
+            cursor: "pointer",
+          }}
+        >
+          Search
+        </button>
+      </div>
+
+      {/* MESSAGE */}
+      {message && (
+        <p
+          style={{
+            marginTop: "15px",
+            color: "red",
+            fontWeight: "bold",
+          }}
+        >
+          {message}
+        </p>
+      )}
 
       {/* RESULT SECTION */}
-      <div style={{ marginTop: "20px" }}>
-        {result.length === 0 ? (
-          <p>No laundry found</p>
-        ) : (
-          result.map((e) => (
+      <div style={{ marginTop: "25px" }}>
+        {result.map((e) => (
+          <div
+            key={e.id}
+            style={{
+              border: "1px solid #ccc",
+              padding: "20px",
+              marginBottom: "20px",
+              borderRadius: "12px",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+            }}
+          >
+            <p>
+              <strong>ID:</strong> {e.studentId}
+            </p>
+
+            <p>
+              <strong>Clothes:</strong> {e.clothCount}
+            </p>
+
+            <p>
+              <strong>Notes:</strong> {e.notes || "No notes"}
+            </p>
+
+            {/* STATUS TIMELINE */}
             <div
-              key={e.id}
               style={{
-                border: "1px solid #ccc",
-                padding: "15px",
-                marginBottom: "15px",
-                borderRadius: "10px",
+                display: "flex",
+                gap: "30px",
+                marginTop: "20px",
+                flexWrap: "wrap",
               }}
             >
-              <p>
-                <strong>ID:</strong> {e.studentId}
-              </p>
-              <p>
-                <strong>Clothes:</strong> {e.clothCount}
-              </p>
-              <p>
-                <strong>Notes:</strong> {e.notes}
-              </p>
+              {/* Submitted */}
+              <div style={{ textAlign: "center" }}>
+                <div
+                  style={{
+                    width: "22px",
+                    height: "22px",
+                    borderRadius: "50%",
+                    background: "green",
+                    margin: "0 auto",
+                  }}
+                />
 
-              {/* STATUS TIMELINE */}
-              <div
-                style={{
-                  display: "flex",
-                  gap: "30px",
-                  marginTop: "15px",
-                  alignItems: "center",
-                }}
-              >
-                {/* Submitted */}
-                <div style={{ textAlign: "center" }}>
-                  <div
-                    style={{
-                      width: "20px",
-                      height: "20px",
-                      borderRadius: "50%",
-                      background: "green",
-                    }}
-                  />
-                  <p>Submitted</p>
-                </div>
-
-                {/* Ready */}
-                <div style={{ textAlign: "center" }}>
-                  <div
-                    style={{
-                      width: "20px",
-                      height: "20px",
-                      borderRadius: "50%",
-                      background:
-                        e.status === "ready" || e.status === "collected"
-                          ? "green"
-                          : "gray",
-                    }}
-                  />
-                  <p>Ready</p>
-                </div>
-
-                {/* Collected */}
-                <div style={{ textAlign: "center" }}>
-                  <div
-                    style={{
-                      width: "20px",
-                      height: "20px",
-                      borderRadius: "50%",
-                      background: e.status === "collected" ? "green" : "gray",
-                    }}
-                  />
-                  <p>Collected</p>
-                </div>
+                <p>Submitted</p>
               </div>
 
-              {/* STATUS TEXT */}
-              <p style={{ marginTop: "10px" }}>
-                <strong>Current Status:</strong> {e.status}
-              </p>
+              {/* Ready */}
+              <div style={{ textAlign: "center" }}>
+                <div
+                  style={{
+                    width: "22px",
+                    height: "22px",
+                    borderRadius: "50%",
+                    background:
+                      e.status === "ready" || e.status === "collected"
+                        ? "green"
+                        : "gray",
+                    margin: "0 auto",
+                  }}
+                />
+
+                <p>Ready</p>
+              </div>
+
+              {/* Collected */}
+              <div style={{ textAlign: "center" }}>
+                <div
+                  style={{
+                    width: "22px",
+                    height: "22px",
+                    borderRadius: "50%",
+                    background: e.status === "collected" ? "green" : "gray",
+                    margin: "0 auto",
+                  }}
+                />
+
+                <p>Collected</p>
+              </div>
             </div>
-          ))
-        )}
+
+            {/* CURRENT STATUS */}
+            <p
+              style={{
+                marginTop: "20px",
+                fontWeight: "bold",
+              }}
+            >
+              Current Status: {e.status}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   );
