@@ -5,11 +5,11 @@ const LaundryContext = createContext();
 
 export const LaundryProvider = ({ children }) => {
   const [entries, setEntries] = useState(() =>
-    getLocalStorage("laundry_entries", [])
+    getLocalStorage("laundry_entries", []),
   );
 
   const [pin, setPin] = useState(() =>
-    getLocalStorage("laundry_worker_pin", "1234")
+    getLocalStorage("laundry_worker_pin", "1234"),
   );
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export const LaundryProvider = ({ children }) => {
     const exists = entries.some(
       (e) =>
         e.studentId === studentId &&
-        (e.status === "submitted" || e.status === "ready")
+        (e.status === "submitted" || e.status === "ready"),
     );
 
     if (exists) {
@@ -98,23 +98,20 @@ export const LaundryProvider = ({ children }) => {
   // dashboard statistics
   const stats = {
     totalActive: entries.filter(
-      (e) => e.status === "submitted" || e.status === "ready"
+      (e) => e.status === "submitted" || e.status === "ready",
     ).length,
 
-    readyCount: entries.filter(
-      (e) => e.status === "ready"
-    ).length,
+    readyCount: entries.filter((e) => e.status === "ready").length,
 
-    collectedCount: entries.filter(
-      (e) => e.status === "collected"
-    ).length,
+    collectedCount: entries.filter((e) => e.status === "collected").length,
 
     totalEntries: entries.length,
   };
 
   // change worker PIN
   const changePin = (oldPin, newPin) => {
-    if (oldPin !== pin) {
+    // FIXED PIN COMPARISON
+    if (oldPin.toString() !== pin.toString()) {
       return {
         success: false,
         message: "Incorrect old PIN",

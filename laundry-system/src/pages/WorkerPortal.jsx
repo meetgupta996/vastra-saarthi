@@ -10,7 +10,8 @@ export default function WorkerPortal() {
     return <Navigate to="/worker-login" />;
   }
 
-  const { entries, addEntry, markReady, markCollected } = useLaundry();
+  const { entries, addEntry, markReady, markCollected, stats, changePin } =
+    useLaundry();
 
   const [studentId, setStudentId] = useState("");
   const [clothCount, setClothCount] = useState("");
@@ -19,6 +20,11 @@ export default function WorkerPortal() {
 
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
+
+  // PIN states
+  const [oldPin, setOldPin] = useState("");
+  const [newPin, setNewPin] = useState("");
+  const [pinMessage, setPinMessage] = useState("");
 
   // add entry handler
   const handleAdd = () => {
@@ -35,6 +41,18 @@ export default function WorkerPortal() {
     setError("");
   };
 
+  // change pin handler
+  const handleChangePin = () => {
+    const result = changePin(oldPin, newPin);
+
+    setPinMessage(result.message);
+
+    if (result.success) {
+      setOldPin("");
+      setNewPin("");
+    }
+  };
+
   // filter logic
   const filteredEntries = entries
     .filter((e) => e.studentId.toLowerCase().includes(search.toLowerCase()))
@@ -47,8 +65,35 @@ export default function WorkerPortal() {
     <div style={{ padding: "20px" }}>
       <h1>Worker Dashboard</h1>
 
-      {/* STATS */}
-      <h3>Stats Section</h3>
+      {/* STATS SECTION */}
+      <section
+        style={{
+          display: "flex",
+          gap: "20px",
+          flexWrap: "wrap",
+          marginBottom: "20px",
+        }}
+      >
+        <div style={{ border: "1px solid #ccc", padding: "10px" }}>
+          <h4>Active Orders</h4>
+          <p>{stats.totalActive}</p>
+        </div>
+
+        <div style={{ border: "1px solid #ccc", padding: "10px" }}>
+          <h4>Ready Orders</h4>
+          <p>{stats.readyCount}</p>
+        </div>
+
+        <div style={{ border: "1px solid #ccc", padding: "10px" }}>
+          <h4>Collected Orders</h4>
+          <p>{stats.collectedCount}</p>
+        </div>
+
+        <div style={{ border: "1px solid #ccc", padding: "10px" }}>
+          <h4>Total Entries</h4>
+          <p>{stats.totalEntries}</p>
+        </div>
+      </section>
 
       {/* ADD LAUNDRY FORM */}
       <section>
@@ -100,8 +145,11 @@ export default function WorkerPortal() {
 
         <div style={{ marginTop: "10px" }}>
           <button onClick={() => setFilter("all")}>All</button>
+
           <button onClick={() => setFilter("submitted")}>Submitted</button>
+
           <button onClick={() => setFilter("ready")}>Ready</button>
+
           <button onClick={() => setFilter("collected")}>Collected</button>
         </div>
       </section>
@@ -125,12 +173,15 @@ export default function WorkerPortal() {
               <p>
                 <strong>ID:</strong> {e.studentId}
               </p>
+
               <p>
                 <strong>Clothes:</strong> {e.clothCount}
               </p>
+
               <p>
                 <strong>Status:</strong> {e.status}
               </p>
+
               <p>
                 <strong>Notes:</strong> {e.notes}
               </p>
@@ -150,6 +201,35 @@ export default function WorkerPortal() {
             </div>
           ))
         )}
+      </section>
+
+      {/* CHANGE PIN SECTION */}
+      <section style={{ marginTop: "30px" }}>
+        <h3>Change Worker PIN</h3>
+
+        <input
+          type="password"
+          placeholder="Old PIN"
+          value={oldPin}
+          onChange={(e) => setOldPin(e.target.value)}
+        />
+
+        <br />
+        <br />
+
+        <input
+          type="password"
+          placeholder="New PIN"
+          value={newPin}
+          onChange={(e) => setNewPin(e.target.value)}
+        />
+
+        <br />
+        <br />
+
+        <button onClick={handleChangePin}>Change PIN</button>
+
+        {pinMessage && <p style={{ marginTop: "10px" }}>{pinMessage}</p>}
       </section>
     </div>
   );
