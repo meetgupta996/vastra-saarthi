@@ -10,41 +10,98 @@ export default function LandingPage() {
 
       <div
         style={{
+          minHeight: "85vh",
           display: "flex",
+          flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          height: "80vh",
-          gap: "40px",
+          padding: "20px",
+          textAlign: "center",
         }}
       >
-        {/* Student Card */}
-        <div
-          onClick={() => navigate("/student")}
+        {/* HEADING */}
+        <h1
           style={{
-            padding: "40px",
-            border: "1px solid #ccc",
-            borderRadius: "10px",
-            cursor: "pointer",
-            textAlign: "center",
-            width: "200px",
+            fontSize: "3.5rem",
+            marginBottom: "10px",
           }}
         >
-          <h2>Student Portal</h2>
-        </div>
+          Vastra Saarthi
+        </h1>
 
-        {/* Worker Card */}
-        <div
-          onClick={() => navigate("/worker-login")}
+        <p
           style={{
-            padding: "40px",
-            border: "1px solid #ccc",
-            borderRadius: "10px",
-            cursor: "pointer",
-            textAlign: "center",
-            width: "200px",
+            color: "#555",
+            fontSize: "1.1rem",
+            marginBottom: "40px",
+            maxWidth: "600px",
           }}
         >
-          <h2>Worker Portal</h2>
+          Smart Campus Laundry Management System
+        </p>
+
+        {/* PORTAL CARDS */}
+        <div
+          style={{
+            display: "flex",
+            gap: "30px",
+            flexWrap: "wrap",
+            justifyContent: "center",
+          }}
+        >
+          {/* STUDENT CARD */}
+          <div
+            onClick={() => navigate("/student")}
+            style={{
+              background: "white",
+              padding: "40px",
+              borderRadius: "18px",
+              cursor: "pointer",
+              textAlign: "center",
+              width: "260px",
+              boxShadow: "0 6px 20px rgba(0,0,0,0.08)",
+              transition: "0.2s ease",
+            }}
+          >
+            <h2
+              style={{
+                marginBottom: "10px",
+                color: "#5b21b6",
+              }}
+            >
+              Student Portal
+            </h2>
+
+            <p style={{ color: "#666" }}>Track laundry status and updates</p>
+          </div>
+
+          {/* WORKER CARD */}
+          <div
+            onClick={() => navigate("/worker-login")}
+            style={{
+              background: "white",
+              padding: "40px",
+              borderRadius: "18px",
+              cursor: "pointer",
+              textAlign: "center",
+              width: "260px",
+              boxShadow: "0 6px 20px rgba(0,0,0,0.08)",
+              transition: "0.2s ease",
+            }}
+          >
+            <h2
+              style={{
+                marginBottom: "10px",
+                color: "#5b21b6",
+              }}
+            >
+              Worker Portal
+            </h2>
+
+            <p style={{ color: "#666" }}>
+              Manage laundry operations efficiently
+            </p>
+          </div>
         </div>
       </div>
     </div>

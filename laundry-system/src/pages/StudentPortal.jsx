@@ -33,56 +33,56 @@ export default function StudentPortal() {
   return (
     <div
       style={{
-        padding: "20px",
         maxWidth: "900px",
         margin: "0 auto",
+        padding: "25px",
       }}
     >
-      <h1 style={{ marginBottom: "20px" }}>Student Portal</h1>
-
-      {/* SEARCH SECTION */}
-      <div
+      <h1
         style={{
-          display: "flex",
-          gap: "10px",
-          flexWrap: "wrap",
+          marginBottom: "25px",
+          textAlign: "center",
         }}
       >
-        <input
-          type="text"
-          placeholder="Enter Student ID"
-          value={studentId}
-          onChange={(e) => setStudentId(e.target.value)}
-          style={{
-            padding: "10px",
-            flex: "1",
-            minWidth: "250px",
-          }}
-        />
+        Student Portal
+      </h1>
 
-        <button
-          onClick={handleSearch}
+      {/* SEARCH SECTION */}
+      <section>
+        <div
           style={{
-            padding: "10px 20px",
-            cursor: "pointer",
+            display: "flex",
+            gap: "12px",
+            flexWrap: "wrap",
           }}
         >
-          Search
-        </button>
-      </div>
+          <input
+            type="text"
+            placeholder="Enter Student ID"
+            value={studentId}
+            onChange={(e) => setStudentId(e.target.value)}
+            style={{
+              flex: "1",
+              minWidth: "250px",
+            }}
+          />
 
-      {/* MESSAGE */}
-      {message && (
-        <p
-          style={{
-            marginTop: "15px",
-            color: "red",
-            fontWeight: "bold",
-          }}
-        >
-          {message}
-        </p>
-      )}
+          <button onClick={handleSearch}>Search</button>
+        </div>
+
+        {/* MESSAGE */}
+        {message && (
+          <p
+            style={{
+              marginTop: "15px",
+              color: "red",
+              fontWeight: "600",
+            }}
+          >
+            {message}
+          </p>
+        )}
+      </section>
 
       {/* RESULT SECTION */}
       <div style={{ marginTop: "25px" }}>
@@ -90,11 +90,12 @@ export default function StudentPortal() {
           <div
             key={e.id}
             style={{
-              border: "1px solid #ccc",
-              padding: "20px",
+              background: "white",
+              padding: "22px",
               marginBottom: "20px",
-              borderRadius: "12px",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+              borderRadius: "18px",
+              boxShadow: "0 6px 20px rgba(0,0,0,0.08)",
+              transition: "0.2s ease",
             }}
           >
             <p>
@@ -114,64 +115,71 @@ export default function StudentPortal() {
               style={{
                 display: "flex",
                 gap: "30px",
-                marginTop: "20px",
+                marginTop: "25px",
                 flexWrap: "wrap",
+                alignItems: "center",
               }}
             >
               {/* Submitted */}
               <div style={{ textAlign: "center" }}>
                 <div
                   style={{
-                    width: "22px",
-                    height: "22px",
+                    width: "24px",
+                    height: "24px",
                     borderRadius: "50%",
                     background: "green",
                     margin: "0 auto",
                   }}
                 />
 
-                <p>Submitted</p>
+                <p style={{ marginTop: "8px" }}>Submitted</p>
               </div>
 
               {/* Ready */}
               <div style={{ textAlign: "center" }}>
                 <div
                   style={{
-                    width: "22px",
-                    height: "22px",
+                    width: "24px",
+                    height: "24px",
                     borderRadius: "50%",
                     background:
                       e.status === "ready" || e.status === "collected"
                         ? "green"
-                        : "gray",
+                        : "#cbd5e1",
                     margin: "0 auto",
                   }}
                 />
 
-                <p>Ready</p>
+                <p style={{ marginTop: "8px" }}>Ready</p>
               </div>
 
               {/* Collected */}
               <div style={{ textAlign: "center" }}>
                 <div
                   style={{
-                    width: "22px",
-                    height: "22px",
+                    width: "24px",
+                    height: "24px",
                     borderRadius: "50%",
-                    background: e.status === "collected" ? "green" : "gray",
+                    background: e.status === "collected" ? "green" : "#cbd5e1",
                     margin: "0 auto",
                   }}
                 />
 
-                <p>Collected</p>
+                <p style={{ marginTop: "8px" }}>Collected</p>
               </div>
             </div>
 
             {/* CURRENT STATUS */}
             <p
               style={{
-                marginTop: "20px",
+                marginTop: "25px",
                 fontWeight: "bold",
+                color:
+                  e.status === "submitted"
+                    ? "orange"
+                    : e.status === "ready"
+                      ? "green"
+                      : "#7c3aed",
               }}
             >
               Current Status: {e.status}

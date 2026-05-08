@@ -8,24 +8,55 @@ export default function Navbar() {
       style={{
         display: "flex",
         justifyContent: "space-between",
-        padding: "15px 30px",
-        background: "#1e293b",
+        alignItems: "center",
+        padding: "18px 35px",
+        background: "linear-gradient(135deg, #7c3aed, #6366f1)",
         color: "white",
+        boxShadow: "0 2px 12px rgba(0,0,0,0.1)",
+        flexWrap: "wrap",
       }}
     >
-      <h2 style={{ cursor: "pointer" }} onClick={() => navigate("/")}>
-        Laundry System
+      {/* LOGO / TITLE */}
+      <h2
+        style={{
+          cursor: "pointer",
+          fontSize: "1.6rem",
+          fontWeight: "700",
+        }}
+        onClick={() => navigate("/")}
+      >
+        Vastra Saarthi
       </h2>
 
-      <div>
+      {/* NAV BUTTONS */}
+      <div
+        style={{
+          display: "flex",
+          gap: "12px",
+          flexWrap: "wrap",
+        }}
+      >
         <button
           onClick={() => navigate("/student")}
-          style={{ marginRight: "10px" }}
+          style={{
+            background: "rgba(255,255,255,0.15)",
+            border: "1px solid rgba(255,255,255,0.2)",
+            backdropFilter: "blur(10px)",
+          }}
         >
-          Student
+          Student Portal
         </button>
 
-        <button onClick={() => navigate("/worker-login")}>Worker</button>
+        <button
+          onClick={() => navigate("/worker-login")}
+          style={{
+            background: "white",
+            color: "#5b21b6",
+            fontWeight: "700",
+          }}
+        >
+          Worker Portal
+        </button>
       </div>
     </div>
   );

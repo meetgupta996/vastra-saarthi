@@ -62,8 +62,20 @@ export default function WorkerPortal() {
     });
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Worker Dashboard</h1>
+    <div
+      style={{
+        maxWidth: "1200px",
+        margin: "0 auto",
+        padding: "25px",
+      }}
+    >
+      <h1
+        style={{
+          marginBottom: "25px",
+        }}
+      >
+        Worker Dashboard
+      </h1>
 
       {/* STATS SECTION */}
       <section
@@ -74,29 +86,71 @@ export default function WorkerPortal() {
           marginBottom: "20px",
         }}
       >
-        <div style={{ border: "1px solid #ccc", padding: "10px" }}>
+        <div
+          style={{
+            background: "white",
+            padding: "20px",
+            borderRadius: "16px",
+            minWidth: "180px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+            textAlign: "center",
+          }}
+        >
           <h4>Active Orders</h4>
           <p>{stats.totalActive}</p>
         </div>
 
-        <div style={{ border: "1px solid #ccc", padding: "10px" }}>
+        <div
+          style={{
+            background: "white",
+            padding: "20px",
+            borderRadius: "16px",
+            minWidth: "180px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+            textAlign: "center",
+          }}
+        >
           <h4>Ready Orders</h4>
           <p>{stats.readyCount}</p>
         </div>
 
-        <div style={{ border: "1px solid #ccc", padding: "10px" }}>
+        <div
+          style={{
+            background: "white",
+            padding: "20px",
+            borderRadius: "16px",
+            minWidth: "180px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+            textAlign: "center",
+          }}
+        >
           <h4>Collected Orders</h4>
           <p>{stats.collectedCount}</p>
         </div>
 
-        <div style={{ border: "1px solid #ccc", padding: "10px" }}>
+        <div
+          style={{
+            background: "white",
+            padding: "20px",
+            borderRadius: "16px",
+            minWidth: "180px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+            textAlign: "center",
+          }}
+        >
           <h4>Total Entries</h4>
           <p>{stats.totalEntries}</p>
         </div>
       </section>
 
       {/* ADD LAUNDRY FORM */}
-      <section>
+      <section
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "15px",
+        }}
+      >
         <h3>Add Laundry</h3>
 
         <input
@@ -106,9 +160,6 @@ export default function WorkerPortal() {
           onChange={(e) => setStudentId(e.target.value)}
         />
 
-        <br />
-        <br />
-
         <input
           type="number"
           placeholder="Cloth Count"
@@ -116,18 +167,12 @@ export default function WorkerPortal() {
           onChange={(e) => setClothCount(e.target.value)}
         />
 
-        <br />
-        <br />
-
         <input
           type="text"
           placeholder="Notes"
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
         />
-
-        <br />
-        <br />
 
         <button onClick={handleAdd}>Add Laundry</button>
 
@@ -143,7 +188,14 @@ export default function WorkerPortal() {
           onChange={(e) => setSearch(e.target.value)}
         />
 
-        <div style={{ marginTop: "10px" }}>
+        <div
+          style={{
+            marginTop: "15px",
+            display: "flex",
+            gap: "10px",
+            flexWrap: "wrap",
+          }}
+        >
           <button onClick={() => setFilter("all")}>All</button>
 
           <button onClick={() => setFilter("submitted")}>Submitted</button>
@@ -165,9 +217,11 @@ export default function WorkerPortal() {
             <div
               key={e.id}
               style={{
-                border: "1px solid #ccc",
-                margin: "10px 0",
-                padding: "10px",
+                background: "white",
+                margin: "15px 0",
+                padding: "20px",
+                borderRadius: "16px",
+                boxShadow: "0 4px 15px rgba(0,0,0,0.07)",
               }}
             >
               <p>
@@ -179,7 +233,20 @@ export default function WorkerPortal() {
               </p>
 
               <p>
-                <strong>Status:</strong> {e.status}
+                <strong>Status:</strong>{" "}
+                <span
+                  style={{
+                    color:
+                      e.status === "submitted"
+                        ? "orange"
+                        : e.status === "ready"
+                          ? "green"
+                          : "#7c3aed",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {e.status}
+                </span>
               </p>
 
               <p>
@@ -188,16 +255,26 @@ export default function WorkerPortal() {
 
               {/* STATUS BUTTONS */}
               {e.status === "submitted" && (
-                <button onClick={() => markReady(e.id)}>Mark Ready</button>
+                <button
+                  onClick={() => markReady(e.id)}
+                  style={{ marginTop: "10px" }}
+                >
+                  Mark Ready
+                </button>
               )}
 
               {e.status === "ready" && (
-                <button onClick={() => markCollected(e.id)}>
+                <button
+                  onClick={() => markCollected(e.id)}
+                  style={{ marginTop: "10px" }}
+                >
                   Mark Collected
                 </button>
               )}
 
-              {e.status === "collected" && <p>✅ Completed</p>}
+              {e.status === "collected" && (
+                <p style={{ marginTop: "10px" }}>✅ Completed</p>
+              )}
             </div>
           ))
         )}
@@ -214,8 +291,7 @@ export default function WorkerPortal() {
           onChange={(e) => setOldPin(e.target.value)}
         />
 
-        <br />
-        <br />
+        <div style={{ marginTop: "15px" }} />
 
         <input
           type="password"
@@ -224,8 +300,7 @@ export default function WorkerPortal() {
           onChange={(e) => setNewPin(e.target.value)}
         />
 
-        <br />
-        <br />
+        <div style={{ marginTop: "15px" }} />
 
         <button onClick={handleChangePin}>Change PIN</button>
 
